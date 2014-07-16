@@ -402,6 +402,7 @@ function parse_name($name, $type=0) {
  * @return boolean
  */
 function require_cache($filename) {
+
     static $_importFiles = array();
     if (!isset($_importFiles[$filename])) {
         if (file_exists_case($filename)) {

@@ -88,6 +88,7 @@ class Auth{
             //可设置配置项 AUTH_CONFIG, 此配置项为数组。
             $this->_config = array_merge($this->_config, C('AUTH_CONFIG'));
         }
+         
     }
 
     /**
@@ -178,6 +179,7 @@ class Auth{
         foreach ($groups as $g) {
             $ids = array_merge($ids, explode(',', trim($g['rules'], ',')));
         }
+     
         $ids = array_unique($ids);
         if (empty($ids)) {
             $_authList[$uid.$t] = array();
@@ -191,9 +193,10 @@ class Auth{
         );
         //读取用户组所有权限规则
         $rules = M()->table($this->_config['AUTH_RULE'])->where($map)->field('condition,name')->select();
-
+       
         //循环规则，判断结果。
         $authList = array();   //
+         
         foreach ($rules as $rule) {
             if (!empty($rule['condition'])) { //根据condition进行验证
                 $user = $this->getUserInfo($uid);//获取用户信息,一维数组
@@ -214,6 +217,7 @@ class Auth{
             //规则列表结果保存到session
             $_SESSION['_AUTH_LIST_'.$uid.$t]=$authList;
         }
+
         return array_unique($authList);
     }
 

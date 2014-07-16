@@ -871,12 +871,14 @@ class Model {
      * @return mixed
      */
      public function create($data='',$type='') {
+ 
         // 如果没有传值默认取POST数据
         if(empty($data)) {
             $data   =   I('post.');
         }elseif(is_object($data)){
             $data   =   get_object_vars($data);
         }
+        
         // 验证数据
         if(empty($data) || !is_array($data)) {
             $this->error = L('_DATA_TYPE_INVALID_');
@@ -895,10 +897,11 @@ class Model {
                 }
             }
         }
-
+        
         // 检测提交字段的合法性
         if(isset($this->options['field'])) { // $this->field('field1,field2...')->create()
             $fields =   $this->options['field'];
+            
             unset($this->options['field']);
         }elseif($type == self::MODEL_INSERT && isset($this->insertFields)) {
             $fields =   $this->insertFields;
@@ -1114,8 +1117,10 @@ class Model {
         if($this->patchValidate && isset($this->error[$val[0]]))
             return ; //当前字段已经有规则验证没有通过
         if(false === $this->_validationFieldItem($data,$val)){
+            
             if($this->patchValidate) {
                 $this->error[$val[0]]   =   $val[2];
+                
             }else{
                 $this->error            =   $val[2];
                 return false;

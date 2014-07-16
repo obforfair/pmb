@@ -5,6 +5,6 @@
  * and open the template in the editor.
  */
 return array(
-    'init_test'=>array("Home\Behavior\TestBehavior")
+    'app_init'=>array("Common\Behaviors\InitBehavior"),
 );
 ?>
