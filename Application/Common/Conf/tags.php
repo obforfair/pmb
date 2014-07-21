@@ -7,4 +7,4 @@
 return array(
     'app_init'=>array("Common\Behaviors\InitBehavior"),
 );
-?>
+

@@ -24,7 +24,7 @@ class IndexController extends Controller {
     }
 
     public function show2() {
-        dd(json_encode("Is Really A Happy Day<a href='http://www.baidu.com'>点击查看</a>"));
+        service('User');
     }
 
 }

@@ -1,12 +1,12 @@
 <?php
 /**
- * 用户管理
+ * 权限管理
  */
 namespace Api\Service;
 
 use Lib\Ob\Service;
 
-class UserService extends Service{
+class RoleService extends Service{
     
     public function __construct() {
         parent::__CONSTRUCT();

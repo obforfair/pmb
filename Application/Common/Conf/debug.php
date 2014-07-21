@@ -7,4 +7,3 @@
 return array(
     'LOAD_EXT_CONFIG' => 'connection_test',
 );
-?>
