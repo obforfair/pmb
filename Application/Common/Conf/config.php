@@ -15,7 +15,7 @@ return array(
     'LOG_LEVEL' => 'EMERG,ALERT,CRIT,ERR,WARN,SQL,DEBUG',
     'LOG_TYPE' => 'File', // 日志记录类型 默认为文件方式
     'AUTOLOAD_NAMESPACE' => array(
-        'Lib' => __ROOT__ . 'Lib',
+        'Lib' => 'Lib',
     ),
     'AUTH_CONFIG' => array(
         'AUTH_ON' => true, //认证开关
