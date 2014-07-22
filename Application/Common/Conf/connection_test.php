@@ -20,7 +20,7 @@ return array(
     'DB2' => 'mysql://root:zhouwei@localhost:3306/paimaibao2#utf8mb4',
     #REDIS
     "REDIS_HOST" => "127.0.0.1",
-    "REDIS_PORT" => "6380",
+    "REDIS_PORT" => "6379",
         #MEMCACHE
 );
 

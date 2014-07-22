@@ -6,5 +6,6 @@
  */
 return array(
     'app_init'=>array("Common\Behaviors\InitBehavior"),
+    'app_begin' => array('Common\Behaviors\CheckLangBehavior'),
 );
 

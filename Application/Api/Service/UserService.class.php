@@ -9,14 +9,22 @@ use Lib\Ob\Service;
 class UserService extends Service{
     
     public function __construct() {
-        parent::__CONSTRUCT();
-        echo __CLASS__."<br />";
+    }
+    /**
+     * 是否已有该用户
+     * @param array | int  $filter
+     */
+    public function ifHasUser($filter){
+        $where = $filter;
+        return M('User')->where($where)->count();
     }
     
-    public function show(){
-        
-        
+    public function registerUser($data){
+        $data['mobile'] = $data['mobile'] ?  $data['mobile'] : '';
+        $data['password'] = $data['password'] ? md5($data['password']) : '';
+        return M('user')->add($data);
     }
+    
 }
 
 ?>

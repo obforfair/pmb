@@ -26,12 +26,12 @@ define('BIND_MODEL','Api');
 //define('BUILD_MODEL_LIST','Api,Admin');
 
 // 开启调试模式 建议开发阶段开启 部署阶段注释或者设为false
-define('APP_DEBUG', (bool) get_cfg_var('pmb_env_online'));
+define('APP_DEBUG', true);
 
 //定义应用目录
 define('APP_PATH','./Application/');
 
-define('LOG_PATH','/var/log/www/lthink/');
+define('LOG_PATH','/var/log/www/pmb/');
 
 // 引入ThinkPHP入口文件
 require './ThinkPHP/ThinkPHP.php';
