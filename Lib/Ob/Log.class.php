@@ -16,6 +16,7 @@ namespace Lib\Ob;
  * 日志处理类
  */
 class Log {
+    
     // 日志级别 从上到下，由低到高
 
     const EMERG = 'EMERG';  // 严重错误: 导致系统崩溃无法使用

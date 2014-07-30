@@ -6,14 +6,14 @@
  */
 return array(
     #DB
-    'DB_FIELDS_CACHE' => true,
+    'DB_FIELDS_CACHE' => false,
     'DB_DEPLOY_TYPE' => 1,
     'DB_RW_SEPARATE' => true,
     'DB_TYPE' => 'mysqli',
     'DB_HOST' => '192.168.2.30,192.168.2.30',
     'DB_NAME' => 'pmb1,pmb1',
     'DB_PORT' => 3306,
-    'DB_PREFIX' => 'bmp_',
+    'DB_PREFIX' => '',
     'DB_USER' => 'admin', // 用户名
     'DB_PWD' => 'zhouwei', // 密码
     'DB_CHARSET' => 'utf8mb4',

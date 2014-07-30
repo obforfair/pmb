@@ -95,9 +95,9 @@ class Cache {
     // 
     protected function queue($key) {
         static $_handler = array(
-    'file' => array('F', 'F'),
-    'xcache' => array('xcache_get', 'xcache_set'),
-    'apc' => array('apc_fetch', 'apc_store'),
+            'file' => array('F', 'F'),
+            'xcache' => array('xcache_get', 'xcache_set'),
+            'apc' => array('apc_fetch', 'apc_store'),
         );
         $queue = isset($this->options['queue']) ? $this->options['queue'] : 'file';
         $fun = isset($_handler[$queue]) ? $_handler[$queue] : $_handler['file'];

@@ -5,5 +5,6 @@
  * and open the template in the editor.
  */
 return array(
-    'LOAD_EXT_CONFIG' => 'connection_test,sdk',
+    'app_begin' => array('Api\Behaviors\AppBeginBehavior'),
 );
+

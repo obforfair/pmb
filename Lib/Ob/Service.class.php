@@ -19,4 +19,8 @@ class Service {
     public function __construct() {
         
     }
+    public static function show(){
+        
+        echo 'show';
+    }
 }

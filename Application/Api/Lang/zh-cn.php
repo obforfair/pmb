@@ -8,7 +8,6 @@ define('E_NORIGHT', 0x00000004); // 对不起！您没有权限进行此操作�
 define('E_DBERROR', 0x00000005); // 对不起！数据库繁忙，请稍后再试。
 define('E_PARAERR', 0x00000006); // 对不起！操作失败，您的输入有错误。
 define('E_NULLGET', 0x00000007); // 对不起！接口查询结果为空。
-define('E_NULLGET', 0x00000007); // 对不起！接口查询结果为空。
 define('E_EMPTY_MOBILE', 0x00001000); // 操作失败，手机号码不能为空。
 define('E_ERR_PWD', 0x00001001); // 密码格式错误。
 define('E_ERR_CODE', 0x00001002); // 验证失败
@@ -16,7 +15,11 @@ define('E_HAS_REGISTER', 0x00001003); // 改号码已经注册。
 define('E_ERR_USERNAME', 0x00001004); // 用户名格式错误。
 define('E_NO_USER', 0x00001005); // 用户名格式错误。
 define('E_PWD_ERR', 0x00001006);
-
+define('E_UPLOAD_SUCCESS', 0x00001007);
+define('E_UPLOAD_FAIL', 0x00001008);
+define('E_ERR_TOOKEN', 0x00001009);
+define('E_LOGIN_FAIL', 0x0000100A);
+define('E_HAS_BIND', 0x0000100B);
 return array(
     "E00000000" => "操作成功", //E_SUCCESS
     "E00000001" => "操作失败", //E_FAILURE
@@ -33,4 +36,9 @@ return array(
     "E00001004" => "用户名格式错误", //E_ERR_USERNAME
     "E00001005" => "没有该用户", //E_ERR_USERNAME
     "E00001006" => "密码错误", //E_ERR_USERNAME
+    "E00001007" => "上传成功", //E_ERR_USERNAME
+    "E00001008" => "上传失败", //E_ERR_USERNAME
+    "E00001009" => "无效Tooken", //E_ERR_USERNAME
+    "E0000100A" => "登录失败", //E_ERR_USERNAME
+    "E0000100B" => "该用户已经被绑定", //E_ERR_USERNAME
 );

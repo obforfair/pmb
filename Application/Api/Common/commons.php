@@ -35,7 +35,7 @@ function check_password($password) {
  * 检测email是否合法
  */
 function check_email($email){
-     if (preg_match("/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$", $email)) {
+     if (preg_match("/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/i", $email)) {
         return true;
     } else {
         return false;

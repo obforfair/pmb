@@ -3,21 +3,27 @@
 return array(
     /*全局*/
     'MODULE_ALLOW_LIST' => array('Admin', 'Api'),
-    'LOAD_EXT_CONFIG' => 'connection_online',
+    'LOAD_EXT_CONFIG' => 'connection_online,sdk,redis',
     'LOAD_EXT_FILE' => 'commons',
     'DEFAULT_MODULE' => 'Api', // 默认模块   
     'DEFAULT_CONTROLLER' => 'Index',
     'DEFAULT_ACTION' => 'Index',
-    'VIEW_PATH' => './Theme/',
+    'URL_CASE_INSENSITIVE'  =>  true,   // 默认false 表示URL区分大小写 true则表示不区分大小写
+    'URL_MODEL'             =>  2,       // URL访问模式,可选参数0、1、2、3,代表以下四种模式：   
     'DEFAULT_FILTER'        =>  'htmlspecialchars',
     'AUTOLOAD_NAMESPACE' => array(
-        'Lib' => 'Lib',
+        'Lib' =>BASE_PATH.'Lib',
     ),    
     
+    /*Uid加密*/
+    'DATA_CRYPT_TYPE'=>'Pmb',
+    'DATA_CRYPT_KEY'=>'PMB@)!$CRYPT',
+    'DATA_CRYPT_EXPRITE'=>'604800',//7天
+    
     /*SESSION控制*/
-    'SESSION_AUTO_START' => TRUE,
+    'SESSION_AUTO_START' => false,
     'VAR_SESSION_ID' => 'sid',
-    'SESSION_OPTIONS' => array('use_cookies' => 1, 'exprite' => 3600),
+    'SESSION_OPTIONS' => array('use_cookies' => 0, 'exprite' => 3600),
     
     /*日志*/
     'LOG_RECORD' => true,

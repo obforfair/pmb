@@ -29,6 +29,7 @@ define('APP_DEBUG',(bool) get_cfg_var('pmb_env_online'));
 
 // 定义应用目录
 define('APP_PATH','./Application/');
+define('BASE_PATH',__DIR__.'/');
 define('LOG_PATH','/var/log/www/lthink/');
 // 引入ThinkPHP入口文件
 require './ThinkPHP/ThinkPHP.php';
