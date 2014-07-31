@@ -46,9 +46,11 @@ class Redis extends Cache {
         $this->options['length'] = isset($options['length']) ? $options['length'] : 0;
         $func = $options['persistent'] ? 'pconnect' : 'connect';
         $this->handler = new \Redis;
-        $options['timeout'] === false ?
-                        $this->handler->$func($options['host'], $options['port']) :
-                        $this->handler->$func($options['host'], $options['port'], $options['timeout']);
+        $connect = $options['timeout'] === false ?
+                $this->handler->$func($options['host'], $options['port']) :
+                $this->handler->$func($options['host'], $options['port'], $options['timeout']);
+        //如果没有连接成功则返回空对象
+        $connect || $this->handler = new Emptys;
     }
 
     /**
@@ -72,6 +74,15 @@ class Redis extends Cache {
      * @param integer $expire  有效时间（秒）
      * @return boolean
      */
+    public function hmset($name, $value, $expire = null) {
+        N('cache_write', 1);
+        $result = $this->handler->hmset($name, $value);
+        if (is_int($expire)) {
+            $this->handler->settimeout($name, $expire);
+        }
+        return $result;
+    }
+
     public function set($name, $value, $expire = null) {
         N('cache_write', 1);
         if (is_null($expire)) {

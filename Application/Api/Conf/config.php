@@ -8,7 +8,10 @@ return array(
     'CONTROLLER_LEVEL' => 1,
     'ERROR_PAGE' => '/Public/error/api_error.html',
     'LOG_PATH' => '/var/log/www/lthink/',
-    'DEFAULT_FILTER'        =>  'addslashes',    
+    'DEFAULT_FILTER'        =>  'addslashes', 
+    /*缓存*/
+    'CACHE_REDIS'=>true,//是否使用redis
+    'CACHE_MEMCACH'=>false,//是否使用memcache
     /*图片*/
     'IMAGE_SAVE_PATH'=>'/var/www/images/',
     'IMAGE_MAX_SIZE' => 3145728,

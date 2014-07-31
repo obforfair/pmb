@@ -12,6 +12,8 @@
 
 namespace Lib\Ob;
 
+use Lib\Ob\Cache\Driver\Emptys;
+
 /**
  * 缓存管理类
  */
@@ -59,6 +61,9 @@ class Cache {
     static function getInstance($type = '', $options = array()) {
         static $_instance = array();
         $guid = $type . to_guid_string($options);
+        if (!C('CACHE_' . $type)) {
+            $type = 'Emptys';
+        }
         if (!isset($_instance[$guid])) {
             $obj = new Cache();
             $_instance[$guid] = $obj->connect($type, $options);
@@ -123,6 +128,9 @@ class Cache {
     }
 
     public function __call($method, $args) {
+        if ($this->handler instanceof Emptys) {
+            return false;
+        }
         //调用缓存类型自己的方法
         if (method_exists($this->handler, $method)) {
             return call_user_func_array(array($this->handler, $method), $args);

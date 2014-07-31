@@ -20,7 +20,6 @@ class Service {
         
     }
     public static function show(){
-        
-        echo 'show';
+
     }
 }

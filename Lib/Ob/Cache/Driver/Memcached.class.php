@@ -43,6 +43,7 @@ class Memcached extends Cache
         $this->handler      =   new MemcachedResource;
         $options['servers'] && $this->handler->addServers($options['servers']);
         $options['lib_options'] && $this->handler->setOptions($options['lib_options']);
+        
     }
 
     /**

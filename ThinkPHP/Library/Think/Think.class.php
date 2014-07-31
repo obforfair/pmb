@@ -247,6 +247,7 @@ class Think {
      * @return void
      */
     static public function appError($errno, $errstr, $errfile, $errline) {
+  
         switch ($errno) {
             case E_ERROR:
             case E_PARSE:

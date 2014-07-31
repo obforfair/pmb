@@ -23,13 +23,12 @@ class Ob {
      * @param mixed $e 异常对象
      */
     static public function appException($e) {
-        
-        if(APP_DEBUG){
+        if (APP_DEBUG) {
             $msg = $e->getTraceAsString();
-        }else{
+        } else {
             $msg = '';
         }
-        jsonReturn(E_ERROR,$msg);
+        jsonReturn(E_ERROR, $msg);
     }
 
     /**
@@ -43,7 +42,7 @@ class Ob {
      */
     static public function appError($errno, $errstr, $errfile, $errline) {
         if (APP_DEBUG) {
-            $msg = "file:" . $errfile . "。errno:" . $errno . '。errline:' .$errline.'。errorMsg:'. $errstr;
+            $msg = "file:" . $errfile . "。errno:" . $errno . '。errline:' . $errline . '。errorMsg:' . $errstr;
         } else {
             $msg = '';
         }
@@ -52,10 +51,10 @@ class Ob {
 
     // 致命错误捕获
     static public function fatalError() {
-        header('HTTP/1.1 500 Interior Error');
-        header('Status:500 Interior Error');
         Log::save();
         if ($e = error_get_last()) {
+            header('HTTP/1.1 500 Interior Error');
+            header('Status:500 Interior Error');
             switch ($e['type']) {
                 case E_ERROR:
                 case E_PARSE:
@@ -68,42 +67,45 @@ class Ob {
             }
         }
     }
+
     /**
      * 错误输出
      * @param mixed $error 错误
      * @return void
      */
     static public function halt($error) {
+        dd(1);
         $e = array();
         if (APP_DEBUG || IS_CLI) {
             //调试模式下输出错误信息
             if (!is_array($error)) {
-                $trace          = debug_backtrace();
-                $e['message']   = $error;
-                $e['file']      = $trace[0]['file'];
-                $e['line']      = $trace[0]['line'];
+                $trace = debug_backtrace();
+                $e['message'] = $error;
+                $e['file'] = $trace[0]['file'];
+                $e['line'] = $trace[0]['line'];
                 ob_start();
                 debug_print_backtrace();
-                $e['trace']     = ob_get_clean();
+                $e['trace'] = ob_get_clean();
             } else {
-                $e              = $error;
+                $e = $error;
             }
-            if(IS_CLI){
-                exit(iconv('UTF-8','gbk',$e['message']).PHP_EOL.'FILE: '.$e['file'].'('.$e['line'].')'.PHP_EOL.$e['trace']);
+            if (IS_CLI) {
+                exit(iconv('UTF-8', 'gbk', $e['message']) . PHP_EOL . 'FILE: ' . $e['file'] . '(' . $e['line'] . ')' . PHP_EOL . $e['trace']);
             }
         } else {
             //否则定向到错误页面
-            $error_page         = C('ERROR_PAGE');
+            $error_page = C('ERROR_PAGE');
             if (!empty($error_page)) {
                 redirect($error_page);
             } else {
-                $message        = is_array($error) ? $error['message'] : $error;
-                $e['message']   = C('SHOW_ERROR_MSG')? $message : C('ERROR_MESSAGE');
+                $message = is_array($error) ? $error['message'] : $error;
+                $e['message'] = C('SHOW_ERROR_MSG') ? $message : C('ERROR_MESSAGE');
             }
         }
         // 包含异常页面模板
-        $exceptionFile =  C('TMPL_EXCEPTION_FILE',null,THINK_PATH.'Tpl/think_exception.tpl');
+        $exceptionFile = C('TMPL_EXCEPTION_FILE', null, THINK_PATH . 'Tpl/think_exception.tpl');
         include $exceptionFile;
         exit;
     }
+
 }

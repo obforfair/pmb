@@ -9,6 +9,7 @@ namespace Api\Service;
 use Lib\Ob\Service;
 use Lib\Ob\Oauth;
 use Lib\Ob\Cache;
+
 class UserService extends Service {
 
     /**
@@ -26,31 +27,15 @@ class UserService extends Service {
      * @return type
      */
     public function registerUser($data) {
-        $data['password'] = $data['password'] ? md5($data['password']) : '';
+        $data['password'] = isset($data['password']) ? md5($data['password']) : '';
         //查看手机号是否注册过;
-        $data['mobile'] && $user = M('user')->where(array('mobile' => $data['mobile']))->find();
-        if ($user) {
+        isset($data['mobile']) && $data['user_type'] = 'mobile';
+        isset($data['mobile']) && $hasuser = M('user')->where(array('mobile' => $data['mobile']))->find();
+        if (isset($hasuser)) {
             return false;
         }
-        if ($data['user_type']) {
-            switch ($data['user_type']) {
-                case 'mobile':
-                    $data['user_type'] = 0;
-                    break;
-                case 'qq':
-                    $data['user_type'] = 1;
-                    break;
-                case 'weixin':
-                    $data['user_type'] = 2;
-                    break;
-                case 'sina':
-                    $data['user_type'] = 3;
-                    break;
-                default:
-                    $data['user_type'] = 9;
-                    break;
-            }
-        }
+        $user_types = array('mobile'=>0,'qq'=>1,'weixin'=>2,'sina'=>3);
+        $data['user_type'] = isset($user_types[$data['user_type']]) ? $user_types[$data['user_type']] : 9;
         return M('user')->add($data);
     }
 
@@ -64,7 +49,7 @@ class UserService extends Service {
     }
 
     /**
-     * 
+     * 根据Tooken从第三方获取基本信息，已此来验证Tooken是否有效
      * @param type $plateform
      * @param type $token
      * @param type $openid
@@ -80,16 +65,36 @@ class UserService extends Service {
         return $data;
     }
 
-    public function getUserInfo($uid){
-        $rediskey = C('REDIS_PREFIX_USER').$uid;
+    /**
+     * 获取用户信息，
+     * @param type $uid
+     */
+    public function getUserInfo($uid) {
+        $rediskey = C('REDIS_PREFIX_USER') . $uid;
         $redis = Cache::getInstance('redis');
-        $userinfo = $redis->hget($rediskey);
-        if(!$userinfo){
-            $baseinfo = M('user')->where(array('user_id'=>$uid,'status'=>0))->find();
-            dd($baseinfo);
+        $userinfo = $redis->hgetall($rediskey);
+        if (!$userinfo) {
+            $userinfo = M('user')->where(array('user_id' => $uid, 'status' => 0))->find();
+            unset($userinfo['password']);
+            $redis->hmset($rediskey, $userinfo, C('REDIS_EXPIRES_USER'));
         }
-        
+        return $userinfo ? $userinfo : '';
     }
+
+    /**
+     * 更新用户信息
+     * @param type $uid
+     * @param type $data
+     * @return type
+     */
+    public function updateUserInfo($uid, $data) {
+        $r = M('user')->where(array('user_id' => $uid))->save($data);
+        $rediskey = C('REDIS_PREFIX_USER') . $uid;
+        $redis = Cache::getInstance('redis');
+        $r && $redis->delete($rediskey);
+        return $r ? true : false;
+    }
+
     /**
      * 根据第三方登录注册或直接获取user_id 
      * @param type $plateform
@@ -99,7 +104,7 @@ class UserService extends Service {
     public function getOauthId($plateform, $open_id, $access_token) {
         //检测tooken是否正确
         $data = service('User', 'getOauthinfo', array($plateform, $open_id, $access_token));
-        if(!$data){
+        if (!$data) {
             return false;
         }
         //检测是否已经注册
@@ -126,8 +131,8 @@ class UserService extends Service {
             $oauth_id ? M()->commit() : M()->rollback();
             $oauth_id || $user_id = null;
         }
-        
-        return $user_id && $oauth_id ? array('user_id'=>$user_id,'oauth_id'=>$oauth_id) : false;
+
+        return $user_id && $oauth_id ? array('user_id' => $user_id, 'oauth_id' => $oauth_id) : false;
     }
 
 }
