@@ -114,13 +114,12 @@ class SinaSDK extends Oauth{
             $params['access_token'] = $data['access_token'];
             $params['uid'] = $openid;
             $data = json_decode($this->http($this->url($api,'.json'), $params),true);
-            return $data['screen_name'] ? $this->convertUserInfo($data) : false;
+            return isset($data['screen_name']) ? $this->convertUserInfo($data) : false;
         }
         
         public function convertUserInfo($userinfo) {
             $data['nickname'] = $userinfo['name'];
             $data['gender'] = $userinfo['gender'];
-            $data['description'] = $userinfo['description'];
             $data['avata'] = $userinfo['avatar_large'];
             $data['gender'] = ($userinfo['gender'] == 'm') ? 1 : 0;
             $data['gender'] = ($userinfo['gender'] == 'f') ? 2 : $data['gender'];  

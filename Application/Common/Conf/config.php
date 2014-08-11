@@ -3,8 +3,7 @@
 return array(
     /*全局*/
     'MODULE_ALLOW_LIST' => array('Admin', 'Api'),
-    'LOAD_EXT_CONFIG' => 'connection_online,sdk,redis',
-    'LOAD_EXT_FILE' => 'commons',
+    'LOAD_EXT_CONFIG' => 'connection_online,sdk,cache,status',
     'DEFAULT_MODULE' => 'Api', // 默认模块   
     'DEFAULT_CONTROLLER' => 'Index',
     'DEFAULT_ACTION' => 'Index',
@@ -37,8 +36,7 @@ return array(
     'LANG_LIST' => 'zh-cn,zh-tw,en',
     'VAR_LANGUAGE' => 'l',
 
-    
-    /*验证*/
+    /*权限验证*/
     'AUTH_CONFIG' => array(
         'AUTH_ON' => true, //认证开关
         'AUTH_TYPE' => 1, // 认证方式，1为时时认证；2为登录认证。

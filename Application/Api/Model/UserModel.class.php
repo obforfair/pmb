@@ -5,7 +5,9 @@ namespace Api\Model;
 use Think\Model;
 
 class UserModel extends Model {
+    
     protected $connection = 'db';
+    
     protected $tableName = 'user';
     
     protected $_validate = array(
@@ -18,7 +20,6 @@ class UserModel extends Model {
     
     public function formateName($name){
         return 'a'.$name;
-        
     }
 }
 

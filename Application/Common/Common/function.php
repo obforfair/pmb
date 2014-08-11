@@ -90,6 +90,7 @@ function EM($name = null, $value = null, $default = null) {
 /*
  * 统一返回数据格式
  */
+
 function jsonReturn($ecode = E_FAILER, $data = array()) {
     if (is_int($ecode)) {
         $ecode = sprintf('E%08X', $ecode);
@@ -110,11 +111,10 @@ function jsonReturn($ecode = E_FAILER, $data = array()) {
  * @param type $options
  * @return type
  */
-function cache($name, $value = '', $options = null) {
-
+function cache($name = null, $value = '', $options = null) {
     static $cache = '';
     if (is_array($options) && empty($cache)) {
-// 缓存操作的同时初始化
+        // 缓存操作的同时初始化
         $type = isset($options['type']) ? $options['type'] : '';
         $cache = Cache::getInstance($type, $options);
     } elseif (is_array($name)) { // 缓存初始化
@@ -124,7 +124,9 @@ function cache($name, $value = '', $options = null) {
     } elseif (empty($cache)) { // 自动初始化
         $cache = Cache::getInstance();
     }
-    if ('' === $value) { // 获取缓存
+    if (null === $name) {
+        return $cache;
+    } elseif ('' === $value) { // 获取缓存
         return $cache->get($name);
     } elseif (is_null($value)) { // 删除缓存
         return $cache->rm($name);
@@ -137,6 +139,7 @@ function cache($name, $value = '', $options = null) {
         return $cache->set($name, $value, $expire);
     }
 }
+
 /**
  * 递归创建文件夹
  * @param type $path 需要创建的文件夹，不包括文件

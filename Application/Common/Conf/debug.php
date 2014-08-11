@@ -5,5 +5,5 @@
  * and open the template in the editor.
  */
 return array(
-    'LOAD_EXT_CONFIG' => 'connection_test,sdk,redis',
+    'LOAD_EXT_CONFIG' => 'connection_test,sdk,cache,status',
 );

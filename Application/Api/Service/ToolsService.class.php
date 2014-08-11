@@ -48,7 +48,7 @@ class ToolsService extends Service {
         $register_code = rand(0, 9) . rand(0, 9) . rand(0, 9) . rand(0, 9) . rand(0, 9) . rand(0, 9);
         $content = "您的拍卖宝验证码为：" . $register_code . " ，为了您的账号安全，请勿将验证码转发给其他人。";
         if (!cache('PMB_MOBILE_CHECK_FILTER:' . $mobile)) {
-            $this->sendMessage($mobile, $content);
+//            $this->sendMessage($mobile, $content);
             //每60秒可以发送一次，
             cache('PMB_MOBILE_CHECK_FILTER:' . $mobile, $register_code, 60);
             //code保存时间为600秒
@@ -74,8 +74,8 @@ class ToolsService extends Service {
      * 对uid进行加密或用session存储
      * @param type $uid
      */
-    public function setUid($uid) {
-        $sid = Crypt::encrypt(serialize(array('uid' => $uid)), C('DATA_CRYPT_KEY'), C('DATA_CRYPT_EXPRITE'));
+    public function setSid($uid, $plateform) {
+        $sid = Crypt::encrypt(serialize(array('uid' => $uid, 'plateform' => $plateform)), C('DATA_CRYPT_KEY'), C('DATA_CRYPT_EXPRITE'));
         return $sid;
     }
 
@@ -89,13 +89,14 @@ class ToolsService extends Service {
     /*
      * 对uid进行解密或从session获取
      */
-    public function getUid() {
-        $sid = I('sid');
+
+    public function getSid() {
+        $sid = I('cookie.sid') ? I('cookie.sid') : I('sid');
         if (!$sid) {
             return null;
         } else {
             $data = unserialize(Crypt::decrypt($sid, C('DATA_CRYPT_KEY')));
-            return isset($data['uid']) ? $data['uid'] : '';
+            return $data ? $data : false;
         }
     }
 
@@ -175,14 +176,20 @@ class ToolsService extends Service {
                 $crop_image_info['image_width'] = $crop_image[0];
                 $crop_image_info['image_height'] = $crop_image[1];
                 $crop_image_info['image_type'] = basename($crop_image['mime']);
-                $crop_infos[] = $crop_image_info;
+                $crop_infos[$alias] = $crop_image_info;
             }
         }
         return $crop_infos;
     }
 
+    /**
+     * 保存到图片库
+     * @param type $image
+     * @param type $type
+     * @return boolean
+     */
     public function saveImage($image, $type) {
-        $info = getimagesize(C('IMAGE_SAVE_PATH').$image);
+        $info = getimagesize(C('IMAGE_SAVE_PATH') . $image);
         if ($info) {
             $data['image_save_path'] = $image;
             $data['image_type'] = basename($info['mime']);
@@ -223,16 +230,97 @@ class ToolsService extends Service {
         if ($image_info['mime'] == 'image/gif') {
             $image = new Image();
             $image->open($tmpname);
-            $r = $image->save($save_name,$extension);
+            $r = $image->save($save_name, $extension);
         } else {
             $r = copy($tmpname, $save_name);
         }
-        if($r){
-             unlink($tmpname);
-             $r = $this->saveImage($sql_save_name, $type);
-             $r && $this->cropImageById($r);
+        if ($r) {
+            unlink($tmpname);
+            $r = $this->saveImage($sql_save_name, $type);
+            $r && $this->cropImageById($r);
         }
         return $r ? $r : false;
+    }
+
+    /**
+     * 获取图片信息
+     * @param type $image_id
+     * @return type
+     */
+    public function getImage($image_id) {
+        $key = C('PREFIX_IMAGE').$image_id;
+        if($data = cache()->get($key)){
+            return $data;
+        }
+        $image_info = M('core_images')->where(array('image_id' => $image_id, 'status' => 0))->find();
+        if ($image_info) {
+            $data['image_info']['image_id'] = $image_info['image_id'];
+            $data['image_info']['file_size'] = $image_info['file_size'];
+            $data['image_default']['image_path'] = $image_info['image_save_path'] ? C('IMAGE_HOST') . '/' . $image_info['image_save_path'] : '';
+            $data['image_default']['image_height'] = $image_info['image_height'];
+            $data['image_default']['image_width'] = $image_info['image_width'];
+            $data['image_default']['image_type'] = $image_info['image_type'];
+            $crop_data = !empty($image_info['crop_infos']) ? unserialize($image_info['crop_infos']) : array();
+            foreach ($crop_data as $k => $v) {
+                $crop_data[$k]['image_path'] = C('IMAGE_HOST') . '/' . $crop_data[$k]['image_save_path'];
+                unset($crop_data[$k]['image_save_path']);
+            }
+            !empty($crop_data) && ($data = array_merge($data, $crop_data));
+        }
+        isset($data) && cache()->set($key, json_encode($data),C('EXPIRES_IMAGE'));
+        return isset($data) ? $data : false;
+    }
+    
+    /**
+     * 获取图册信息
+     * @param type $image_ids
+     * @return type
+     */
+    public function getImages($image_ids = array()){
+        $image_ids && $image_ids = is_array($image_ids) ? : explode(',',$image_ids);
+        $data = array();
+        foreach($image_ids as $image_id){
+            $data[] = $this->getImage($image_id);
+        }
+        return $data;
+    }
+    /**
+     * 验证图片是否存在
+     * @param type $image_ids
+     * @return type
+     */
+    public function checkImageids($image_ids) {
+        $image_ids = M('core_images')->field('image_id')->where(array('image_id' => array('in', $image_ids)))->getfield('image_id', true);
+        return $image_ids;
+    }
+
+    /**
+     * 图片id保存为gallery
+     * @param type $image_ids
+     */
+    public function createGallery($image_ids) {
+        $image_ids = implode(',', $image_ids);
+        $r = M('core_gallery')->add(array('image_ids' => $image_ids));
+        return $r ? $r : false;
+    }
+
+    /**
+     * 获取类id
+     * @param type $category
+     */
+    public function getCategoryId($category) {
+        $categorys = M('category')->getField('category_id,name');
+        if (is_numeric($category)) {
+            return isset($categorys[$category]) ? $category : false;
+        } else {
+            $categorys = array_flip($categorys);
+            return isset($categorys[$category]) ? $categorys[$category] : false;
+        }
+    }
+
+    public function getStatusInfo($type, $key) {
+        $status = C('STATUS');
+        return $r = isset($status[$type][$key]) ? $r : NULL;
     }
 
 }

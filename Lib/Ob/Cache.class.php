@@ -32,7 +32,14 @@ class Cache {
      * @access protected
      */
     protected $options = array();
-
+    
+    protected $default_driver = 'Emptys';
+    
+    public function __construct() {
+        if(C('DATA_CACHE_DEFAULT')){
+            $this->default_driver = 'Lib\\Ob\\Cache\\Driver\\'.ucfirst(strtolower(C('DATA_CACHE_DEFAULT')));
+        }
+    }
     /**
      * 连接缓存
      * @access public
@@ -61,9 +68,6 @@ class Cache {
     static function getInstance($type = '', $options = array()) {
         static $_instance = array();
         $guid = $type . to_guid_string($options);
-        if (!C('CACHE_' . $type)) {
-            $type = 'Emptys';
-        }
         if (!isset($_instance[$guid])) {
             $obj = new Cache();
             $_instance[$guid] = $obj->connect($type, $options);

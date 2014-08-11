@@ -17,9 +17,10 @@ define('E_NO_USER', 0x00001005); // 用户名格式错误。
 define('E_PWD_ERR', 0x00001006);
 define('E_UPLOAD_SUCCESS', 0x00001007);
 define('E_UPLOAD_FAIL', 0x00001008);
-define('E_ERR_TOOKEN', 0x00001009);
+define('E_ERR_TOKEN', 0x00001009);
 define('E_LOGIN_FAIL', 0x0000100A);
 define('E_HAS_BIND', 0x0000100B);
+define('E_BEYOND_TIME', 0x0000100C);
 return array(
     "E00000000" => "操作成功", //E_SUCCESS
     "E00000001" => "操作失败", //E_FAILURE
@@ -41,4 +42,5 @@ return array(
     "E00001009" => "无效Tooken", //E_ERR_USERNAME
     "E0000100A" => "登录失败", //E_ERR_USERNAME
     "E0000100B" => "该用户已经被绑定", //E_ERR_USERNAME
+    "E0000100C" => "时间选择超出设置范围", //E_ERR_USERNAME
 );

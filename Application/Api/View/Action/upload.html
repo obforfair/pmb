@@ -12,11 +12,17 @@ and open the template in the editor.
     </head>
     <body>
         <div>
-            <form action="__URL__/uploadimage?type=avata" enctype="multipart/form-data" method="post" >
-                <input type='hidden' name='type' value='avata' />
+            <form action="__URL__/uploadimage" enctype="multipart/form-data" method="post" >
+                <input type='hidden' name='image_type' value='avata' />
+                <input type="text" name="name2" />
                 <input type="text" name="name" /><input type="file" name="photo" />
                 <input type="submit" value="提交" >
             </form>
+             <form action="http://192.168.1.188/api/user/login" enctype="multipart/form-data" method="post" >
+                <input type='text' name='mobile' value='' />
+                 <input type='text' name='pwd' value='' />
+                <input type="submit" value="提交" >
+            </form>           
         </div>
     </body>
 </html>

@@ -25,7 +25,11 @@ class Emptys {
     public function __call($name,$arg) {
         return false;
     }
-
+    
+    public function __callStatic($name, $arguments) {
+        return false;
+    }
+    
     public function __set($name, $value) {
         return false;
     }

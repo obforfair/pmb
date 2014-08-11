@@ -340,6 +340,7 @@ function I($name,$default='',$filter=null,$datas=null) {
         }
     }else{ // 变量默认值
         $data       =    isset($default)?$default:NULL;
+
     }
     return $data;
 }

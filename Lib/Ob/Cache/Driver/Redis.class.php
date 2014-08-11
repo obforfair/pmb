@@ -28,7 +28,8 @@ class Redis extends Cache {
      * @access public
      */
     public function __construct($options = array()) {
-
+        parent::__construct();
+        
         if (!extension_loaded('redis')) {
             E(L('_NOT_SUPPERT_') . ':redis');
         }
@@ -49,8 +50,8 @@ class Redis extends Cache {
         $connect = $options['timeout'] === false ?
                 $this->handler->$func($options['host'], $options['port']) :
                 $this->handler->$func($options['host'], $options['port'], $options['timeout']);
-        //如果没有连接成功则返回空对象
-        $connect || $this->handler = new Emptys;
+        //如果没有连接成功则返回默认驱动
+        $connect || $this->handler = new $this->default_driver;
     }
 
     /**

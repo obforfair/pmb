@@ -8,15 +8,17 @@
 // +----------------------------------------------------------------------
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
-
+error_reporting(E_ALL);
+ini_set('display_errors','on');
 // 应用入口文件
 function dd(){
     $params = func_get_args();
     echo "<pre>";
     print_r($params);
     exit();
+    $http_response_header;
+    $HTTP_RAW_POST_DATA;
 }
-
 // 检测PHP环境
 if(version_compare(PHP_VERSION,'5.3.0','<'))  die('require PHP > 5.3.0 !');
 
@@ -25,12 +27,13 @@ define('BIND_MODEL','Api');
 //define('BUILD_MODEL_LIST','Api,Admin');
 
 // 开启调试模式 建议开发阶段开启 部署阶段注释或者设为false
-define('APP_DEBUG',true);
+define('APP_DEBUG', TRUE);
 
-// 定义应用目录
+//定义应用目录
 define('APP_PATH','./Application/');
 define('BASE_PATH',__DIR__.'/');
-define('LOG_PATH','/var/log/www/lthink/');
+define('LOG_PATH','/var/log/www/pmb/');
+
 // 引入ThinkPHP入口文件
 require './ThinkPHP/ThinkPHP.php';
 
