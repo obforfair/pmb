@@ -17,6 +17,8 @@ return array(
     'EXPIRES_USER' => 86400, //24小时
     'PREFIX_AUTION' => 'AUTION_INFO:',
     'EXPIRES_AUTION' => 86400, //24小时
+    'PREFIX_AUTION_LIST_ID'=>'AUTION_IDS:',
+    'EXPIRES_AUTION_LIST_ID' => 1800, //24小时
     'PREFIX_IMAGE' => 'IMAGE_PMB:',
     'EXPIRES_IMAGE'=>86400 //24小时
 );

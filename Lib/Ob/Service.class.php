@@ -21,7 +21,7 @@ class Service {
         
     }
 
-    public function getMCache($key, $params) {
+    public function getMCache($key, $params='') {
         if (!$params) {
             $info = cache()->hgetall($key);
         } elseif (is_array($params)) {

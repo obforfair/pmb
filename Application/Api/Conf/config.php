@@ -15,6 +15,7 @@ return array(
     'IMAGE_SAVE_PATH' => '/var/www/images/',
     'IMAGE_MAX_SIZE' => 3145728,
     'IMAGE_CROP_AVATA' => 'small:thumb:200_200_3,middle:thumb:400_400_3',
+    'IMAGE_CROP_AUTION' => 'small:thumb:200_200_3,middle:thumb:400_400_3',
     'IMAGE_HOST' => 'http://image.pmb.com',
     /* 上传 */
     'Upload' => array(

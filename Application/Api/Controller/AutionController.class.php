@@ -112,20 +112,47 @@ class AutionController extends Controller {
     }
 
     /**
-     * 
-     * @param type $status 1:拍卖中，2预展中
+     * @param type $status 0
+     * @param type $order_type  1:'end_time desc';2:'end_time asc';
+                             3:'start_time desc';4: 'start_time asc';5:'aution_id desc';
+                             6: 'aution_id asc';default:'end_time desc';
      * @param type $page
      * @param type $first_id
      */
-    public function market($status = 1, $last_id = 100000000000) {
-        $aution_ids = service('Aution', 'getIds', array('where' => array('status' => $status, 'last_id' => array('lt' => $last_id)),
-            'limit' => 30, 'order' => 'start_time asc'));
+    public function listing($status = 1, $first_id = '', $last_id = '', $order_type = '1', $limit = 20) {
+        $user = $this->user;
+        $status = in_array($status,array(1,2)) ? $status: 1;
+        $aution_ids = service('Aution', 'loadAutionIds', array($status, $order_type, $first_id));
         $aution_ids || jsonReturn(E_NULLGET);
-        $data = array();
+        #组织数据
+        $data['data_info']['uid'] = $user['uid'] ? : '';
+        $data['data_info']['first_id'] = $aution_ids[0];
+        $data['data_info']['last_id'] = '';
+        $data['data_info']['hast_data'] = '0';
+        $index = $last_id ? array_search($last_id, $aution_ids) : 0;
+        $aution_ids = array_slice($aution_ids, $index);
+        #获取详细信息
+        $datas = array();
+        $count = 0;
         foreach ($aution_ids as $aution_id) {
-            $data[] = service('Aution', 'allInfo', $aution_id);
+            $info = service('Aution', 'marketInfo', $aution_id);
+            if(!$info){
+                continue;
+            }
+            if ($info['aution_info']['status'] == $status) {
+                $datas[] = $info;
+                $count++;
+            }
+            #获取$limit+1个数据，有最后一个数据表示有下一页
+            if ($count > $limit) {
+                $data['data_info']['last_id'] = $aution_id;
+                $data['data_info']['hast_data'] = '1';
+                array_pop($datas);
+                break;
+            }
         }
-        $data ? jsonReturn(E_SUCCESS,$data) : jsonReturn(E_NULLGET);
+        $data['datas'] = $datas;
+        jsonReturn(E_SUCCESS, $data);
     }
 
     public function aution() {
